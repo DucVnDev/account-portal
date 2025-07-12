@@ -12,6 +12,14 @@ import java.io.IOException;
 @Component
 public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 
+  /**
+   * This method is called when an unauthenticated user tries to access a secured endpoint. It sends
+   * a 401 Unauthorized response.
+   *
+   * @param request       the HttpServletRequest
+   * @param response      the HttpServletResponse
+   * @param authException the AuthenticationException that occurred
+   */
   @Override
   public void commence(HttpServletRequest request,
       HttpServletResponse response,

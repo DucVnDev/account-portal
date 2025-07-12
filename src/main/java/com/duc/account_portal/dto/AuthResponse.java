@@ -7,6 +7,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthResponse {
 
+  /**
+   * The JWT token generated after successful authentication.
+   */
   private String token;
+  /**
+   * The type of the token, typically "Bearer".
+   */
   private String type = "Bearer";
 }

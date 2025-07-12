@@ -11,12 +11,24 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
+  /**
+   * The secret key used to sign the JWT tokens.
+   */
   @Value("${spring.security.jwt.secret}")
   private String jwtSecret;
 
+  /**
+   * The expiration time for the JWT tokens in milliseconds.
+   */
   @Value("${spring.security.jwt.expiration}")
   private long jwtExpirationMs;
 
+  /**
+   * Generates a JWT token for the given username.
+   *
+   * @param username the username for which the token is generated
+   * @return a JWT token as a String
+   */
   public String generateToken(String username) {
     return Jwts.builder()
         .setSubject(username)
@@ -26,19 +38,46 @@ public class JwtUtil {
         .compact();
   }
 
+  /**
+   * Retrieves the username from the given JWT token.
+   *
+   * @param token the JWT token
+   * @return the username extracted from the token
+   */
   public String getUsernameFromToken(String token) {
     return getClaimFromToken(token, Claims::getSubject);
   }
 
+  /**
+   * Retrieves the expiration date from the given JWT token.
+   *
+   * @param token the JWT token
+   * @return the expiration date of the token
+   */
   public Date getExpirationDateFromToken(String token) {
     return getClaimFromToken(token, Claims::getExpiration);
   }
 
+  /**
+   * Extracts a specific claim from the JWT token using the provided claims resolver.
+   *
+   * @param token          the JWT token
+   * @param claimsResolver a function to extract the desired claim
+   * @param <T>            the type of the claim to be extracted
+   * @return the extracted claim
+   */
   public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
     final Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
     return claimsResolver.apply(claims);
+
   }
 
+  /**
+   * Checks if the JWT token is expired.
+   *
+   * @param token the JWT token
+   * @return true if the token is expired, false otherwise
+   */
   public boolean validateJwtToken(String authToken) {
     try {
       Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);

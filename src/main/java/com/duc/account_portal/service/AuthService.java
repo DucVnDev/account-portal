@@ -22,11 +22,18 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class AuthService {
 
+  // This service handles user authentication and registration.
   private final AuthenticationManager authenticationManager;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtUtil jwtUtil;
 
+  /**
+   * Registers a new user with the provided registration details.
+   *
+   * @param request the registration request containing username, email, and password
+   * @throws RuntimeException if the username or email is already taken
+   */
   @Transactional
   public void register(RegisterRequest request) {
     if (userRepository.existsByUsername(request.getUsername())) {
@@ -43,6 +50,12 @@ public class AuthService {
     userRepository.save(user);
   }
 
+  /**
+   * Authenticates a user with the provided login credentials.
+   *
+   * @param request the login request containing username and password
+   * @return an AuthResponse containing the JWT token and its type
+   */
   public AuthResponse authenticate(LoginRequest request) {
     Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(

@@ -15,12 +15,20 @@ public class AuthController {
 
   private final AuthService authService;
 
+  /**
+   * This endpoint is used for user registration. It accepts a RegisterRequest object containing
+   * username, email, and password, and registers the user in the system.
+   */
   @PostMapping("/register")
   public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
     authService.register(request);
     return ResponseEntity.ok("User registered successfully!");
   }
 
+  /**
+   * This endpoint is used for user login. It accepts a LoginRequest object containing username and
+   * password, and returns an AuthResponse object containing the JWT token.
+   */
   @PostMapping("/login")
   public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
     AuthResponse response = authService.authenticate(request);
