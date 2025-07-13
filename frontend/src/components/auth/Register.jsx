@@ -16,6 +16,7 @@ export default function Register() {
 
   const [success, setSuccess] = useState("");
 
+  // Handle form submission
   const handleSubmit = async e => {
     e.preventDefault();
     if (form.password !== form.confirmPassword) {

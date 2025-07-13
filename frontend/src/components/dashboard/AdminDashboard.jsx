@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { jwtDecode } from "jwt-decode";
-import axios from "axios";
+import userService from "../../services/userService";
 
 export default function AdminDashboard() {
   const { token } = useContext(AuthContext);
@@ -11,13 +10,11 @@ export default function AdminDashboard() {
 
   const [username, setUsername] = useState("User");
   useEffect(() => {
+    // Fetch the admin username from the token
     const fetchMe = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/users/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        username = res.data.username || "User";
-        // Log
+        const res = await userService.getMe(token);
+        const username = res.data.username || "User";
         console.log("[AdminDashboard] Fetched username:", res.data);
         setUsername(username);
       } catch {
@@ -28,14 +25,12 @@ export default function AdminDashboard() {
   }, [token]);
 
   useEffect(() => {
+    // Fetch all users for the admin dashboard
     const fetchUsers = async () => {
       setLoading(true);
       setError("");
       try {
-        const res = await axios.get("http://localhost:8080/api/users", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        // Log
+        const res = await userService.getUsers(token);
         console.log("[AdminDashboard] Fetched users:", res.data);
         setUsers(res.data);
       } catch (err) {
@@ -46,12 +41,11 @@ export default function AdminDashboard() {
     fetchUsers();
   }, [token]);
 
+  // Handle user deletion
   const handleDelete = async (userId) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
-      await axios.delete(`http://localhost:8080/api/users/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await userService.deleteUser(userId, token);
       setUsers(users.filter(u => u.id !== userId));
     } catch {
       alert("Failed to delete user");

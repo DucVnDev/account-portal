@@ -14,7 +14,10 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("[Login] Submitting login for:", username);
+
+    // Call the authService to perform login
     const token = await authService.login(username, password);
+    
     if (token) {
       console.log("[Login] Login successful, received token:", token);
       login(token);

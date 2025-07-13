@@ -15,7 +15,6 @@ export default function AppRoutes() {
       <Route
         path="/profile"
         element={
-            // {console.log("[AppRoutes] Render route: /profile (USER)")}
             <MyProfile />
         }
       />

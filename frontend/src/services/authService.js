@@ -1,7 +1,5 @@
 import axios from "axios";
-
-// Define the base URL for the API
-const API_URL = "http://localhost:8080/api"
+import { API_URL } from "../constants/api";
 
 const authService = {
   // Login function to authenticate user and return a token
