@@ -11,7 +11,7 @@ export default function ProtectedRoute({ children, role }) {
   if (role) {
     try {
       const payload = jwtDecode(token);
-      if (payload.role !== role) return <Navigate to="/login" />;
+      if ((payload.sub).toUpperCase() !== role) return <Navigate to="/login" />;
     } catch {
       return <Navigate to="/login" />;
     }

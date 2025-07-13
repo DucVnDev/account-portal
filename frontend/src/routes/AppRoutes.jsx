@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../components/auth/login";
 import Register from "../components/auth/Register";
-import UserDashboard from "../components/dashboard/UserDashboard";
+import MyProfile from "../components/dashboard/MyProfile";
 import AdminDashboard from "../components/dashboard/AdminDashboard";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
 
@@ -15,15 +15,15 @@ export default function AppRoutes() {
       <Route
         path="/profile"
         element={
-          <ProtectedRoute role="USER">
-            <UserDashboard />
-          </ProtectedRoute>
+            // {console.log("[AppRoutes] Render route: /profile (USER)")}
+            <MyProfile />
         }
       />
       <Route
         path="/admin"
         element={
           <ProtectedRoute role="ADMIN">
+            {console.log("[AppRoutes] Render route: /admin (ADMIN)")}
             <AdminDashboard />
           </ProtectedRoute>
         }

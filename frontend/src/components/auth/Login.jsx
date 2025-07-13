@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
+import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -12,11 +13,31 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("[Login] Submitting login for:", username);
     const token = await authService.login(username, password);
     if (token) {
+      console.log("[Login] Login successful, received token:", token);
       login(token);
-      navigate("/profile");
+      let role = "USER";
+      try {
+        const payload = jwtDecode(token);        if (role === "ADMIN") {
+          console.log("[Login] Navigating to /admin");
+          setTimeout(() => navigate("/admin"), 0);
+        }
+        role = (payload.sub || "user").toUpperCase();;
+        console.log("[Login] Decoded sub (role):", role);
+      } catch {
+        console.log("[Login] Failed to decode token, defaulting to user");
+      }
+      if (role === "ADMIN") {
+        console.log("[Login] Navigating to /admin");
+        navigate("/admin");
+      } else {
+        console.log("[Login] Navigating to /user");
+        navigate("/profile");
+      }
     } else {
+      console.log("[Login] Login failed for:", username);
       setError("Login failed. Please check your credentials.");
     }
   };
