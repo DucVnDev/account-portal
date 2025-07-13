@@ -4,6 +4,8 @@ import Navbar from "./components/layout/Navbar";
 import AppRoutes from "./routes/AppRoutes";
 
 export default function App() {
+  console.log("App mounted");
+
   return (
     <AuthProvider>
       <BrowserRouter>
