@@ -4,9 +4,11 @@ import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
 
 import java.util.Date;
 import java.util.function.Function;
+
 
 @Component
 public class JwtUtil {
@@ -23,6 +25,10 @@ public class JwtUtil {
   @Value("${spring.security.jwt.expiration}")
   private long jwtExpirationMs;
 
+  private SecretKey getSecretKey() {
+    return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+  }
+
   /**
    * Generates a JWT token for the given username.
    *
@@ -34,7 +40,7 @@ public class JwtUtil {
         .setSubject(username)
         .setIssuedAt(new Date())
         .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-        .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS256)
+        .signWith(getSecretKey(), SignatureAlgorithm.HS256)
         .compact();
   }
 
@@ -59,7 +65,7 @@ public class JwtUtil {
   }
 
   /**
-   * Extracts a specific claim from the JWT token using the provided claims resolver.
+   * Extracts a specific claim from the JWT token using the provided claims' resolver.
    *
    * @param token          the JWT token
    * @param claimsResolver a function to extract the desired claim
@@ -67,22 +73,29 @@ public class JwtUtil {
    * @return the extracted claim
    */
   public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-    final Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+    Claims claims = Jwts.parserBuilder()
+        .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+        .build()
+        .parseClaimsJws(token)
+        .getBody();
     return claimsResolver.apply(claims);
-
   }
+
 
   /**
    * Checks if the JWT token is expired.
    *
-   * @param token the JWT token
+   * @param authToken the JWT token
    * @return true if the token is expired, false otherwise
    */
   public boolean validateJwtToken(String authToken) {
     try {
-      Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+      Jwts.parserBuilder()
+          .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+          .build()
+          .parseClaimsJws(authToken);
       return true;
-    } catch (SignatureException | MalformedJwtException | ExpiredJwtException |
+    } catch (SecurityException | MalformedJwtException | ExpiredJwtException |
              UnsupportedJwtException | IllegalArgumentException e) {
       return false;
     }
