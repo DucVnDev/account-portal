@@ -34,20 +34,22 @@ public class UserController {
    * @return ResponseEntity containing the User object representing the current user's profile.
    */
   @GetMapping("/me")
+  @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
   public ResponseEntity<User> getCurrentUser() {
     return ResponseEntity.ok(userService.getCurrentUserProfile());
   }
 
-//  /**
-//   * Updates the profile of the currently authenticated user.
-//   *
-//   * @param updateUser User object containing updated information for the current user.
-//   * @return ResponseEntity containing the updated User object.
-//   */
-//  @PutMapping("/me")
-//  public ResponseEntity<User> updateProfile(@RequestBody User updateUser) {
-//    return ResponseEntity.ok(userService.updateCurrentUserProfile(updateUser));
-//  }
+  /**
+   * Updates the profile of the currently authenticated user.
+   *
+   * @param updateUser User object containing updated information for the current user.
+   * @return ResponseEntity containing the updated User object.
+   */
+  @PutMapping("/me")
+  @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+  public ResponseEntity<User> updateProfile(@RequestBody User updateUser) {
+    return ResponseEntity.ok(userService.updateCurrentUserProfile(updateUser));
+  }
 
 
   /**

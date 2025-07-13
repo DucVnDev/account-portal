@@ -35,23 +35,23 @@ public class UserService {
     return userDetails.getUser();
   }
 
-//  /**
-//   * Updates the profile of the currently authenticated user.
-//   *
-//   * @param updateUser User object containing updated information for the current user.
-//   * @return User object representing the updated user profile.
-//   */
-//  public User updateCurrentUserProfile(User updateUser) {
-//    CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder
-//        .getContext().getAuthentication().getPrincipal();
-//    User currentUser = userDetails.getUser();
-//
-//    currentUser.setEmail(updateUser.getEmail());
-//    currentUser.setUsername(updateUser.getUsername());
-//    currentUser.setAvatar(updateUser.getAvatar()); // nếu có trường avatar
-//
-//    return userRepository.save(currentUser);
-//  }
+  /**
+   * Updates the profile of the currently authenticated user.
+   *
+   * @param updateUser User object containing updated information for the current user.
+   * @return User object representing the updated user profile.
+   */
+  public User updateCurrentUserProfile(User updateUser) {
+    CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder
+        .getContext().getAuthentication().getPrincipal();
+    User currentUser = userDetails.getUser();
+
+    currentUser.setEmail(updateUser.getEmail());
+    currentUser.setUsername(updateUser.getUsername());
+//    currentUser.setAvatar(updateUser.getAvatar());
+
+    return userRepository.save(currentUser);
+  }
 
   /**
    * Deletes a user by their ID.
