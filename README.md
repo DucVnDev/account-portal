@@ -58,4 +58,74 @@ Các API đều yêu cầu xác thực bằng JWT token (trừ đăng ký và đ
    ```
 4. Truy cập frontend tại `http://localhost:5173`
 
+#### Database
+
+1. Sử dụng cơ sở dữ liệu (MySQL).
+2. Cấu hình kết nối database trong file `backend/src/main/resources/application.properties`:
+   - Ví dụ cho MySQL:
+     ```properties
+     spring.datasource.url=jdbc:mysql://localhost:3306/account_portal
+     spring.datasource.username=your_db_user
+     spring.datasource.password=your_db_password
+     spring.jpa.hibernate.ddl-auto=update
+     ```
+3. Tạo database thủ công (nếu cần):
+   ```sql
+   CREATE DATABASE account_portal_db;
+   ```
+4. Khi chạy backend lần đầu, các bảng sẽ được tự động tạo ra.
+5. Có thể xem dữ liệu mẫu hoặc quản lý bảng qua các công cụ như phpMyAdmin, DBeaver,...
+
 ---
+
+### Ảnh minh họa giao diện
+
+Một số ảnh chụp màn hình thực tế sau khi build và chạy project:
+
+#### Trang đăng nhập
+![Login Screen](./img/00_login.png)
+
+#### Trang đăng nhập - username/password không chính xác
+![Login Screen](./img/00_login_failed.png)
+
+#### Trang đăng ký
+![Register Screen](./img/00_register.png)
+
+#### Trang đăng ký - user đã tồn tại
+![Register Screen](./img/00_register_failed.png)
+
+---
+
+#### Giao diện Admin Dashboard (ADMIN)
+![Admin Dashboard](./img/01_admin_dashboard.png)
+
+#### Giao diện Admin: Xem & Xóa user (ADMIN)
+![Admin Delete User](./img/01_admin_dashboard_delete_user.png)
+ 
+#### Giao diện Admin: My Profile (ADMIN)
+![Admin My Profile](./img/01_admin_my_profile.png)
+
+#### Giao diện Admin: Update My Profile (ADMIN)
+![Admin Update My Profile](./img/01_admin_update_myprofile.png)
+
+---
+
+#### Giao diện User: My Profile (USER)
+![User My Profile](./img/02_user_my_profile.png)
+
+#### Giao diện User: Update My Profile (USER)
+![User Update My Profile](./img/02_user_upfate_my_profile.png)
+
+---
+
+#### Bảng users trong database
+![DB Users Table](./img/03_db_users.png)
+
+#### Bảng user_roles trong database
+![DB User Roles Table](./img/04_db_user_roles.png)
+
+---
+
+## Thank you for reading and following this project!
+
+
