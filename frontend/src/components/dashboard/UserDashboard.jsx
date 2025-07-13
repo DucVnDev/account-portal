@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+import jwt_decode from "jwt-decode";
 
 export default function UserDashboard() {
   const { token } = useContext(AuthContext);
 
-  // For demo: decode token payload (replace by jwt-decode in real app)
   let username = "User";
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = jwt_decode(token);
     username = payload.username || username;
   } catch {}
 
